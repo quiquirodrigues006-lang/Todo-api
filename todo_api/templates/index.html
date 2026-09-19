@@ -1,0 +1,102 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Documentação da API - TodoApp</title>
+    <link rel="stylesheet" href="{% static 'style.css' %}">
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>Todo API - Documentação</h1>
+            <p>API RESTful para gerenciamento de tarefas. Todas as requisições (exceto a geração de token) exigem autenticação via JWT.</p>
+        </header>
+
+        <section class="auth-section">
+            <h2>Autenticação</h2>
+            <p>Envie o token no cabeçalho das requisições protegidas: <code>Authorization: Bearer &lt;seu_token_jwt&gt;</code></p>
+
+            <div class="endpoint">
+                <h3><span class="method post">POST</span> /api/token/</h3>
+                <p>Gera o par de tokens (access e refresh) para um usuário existente.</p>
+                <h4>Body (JSON)</h4>
+                <pre><code>{
+  "username": "seu_usuario",
+  "password": "sua_senha"
+}</code></pre>
+            </div>
+
+            <div class="endpoint">
+                <h3><span class="method post">POST</span> /api/token/refresh/</h3>
+                <p>Gera um novo token de acesso usando o token de refresh.</p>
+                <h4>Body (JSON)</h4>
+                <pre><code>{
+  "refresh": "seu_token_de_refresh_aqui"
+}</code></pre>
+            </div>
+        </section>
+
+        <section class="tasks-section">
+            <h2>Tarefas (Tasks)</h2>
+
+            <div class="endpoint">
+                <h3><span class="method get">GET</span> /api/tasks/</h3>
+                <p>Retorna a lista de todas as tarefas pertencentes ao usuário autenticado.</p>
+                <h4>Response (200 OK)</h4>
+                <pre><code>[
+  {
+    "id": 1,
+    "user": "nome_do_usuario",
+    "title": "Estudar Django",
+    "description": "Revisar serializers e views",
+    "status": "PENDING",
+    "priority": 3,
+    "created_at": "2026-09-12T10:00:00Z",
+    "updated_at": "2026-09-12T10:00:00Z"
+  }
+]</code></pre>
+            </div>
+
+            <div class="endpoint">
+                <h3><span class="method post">POST</span> /api/tasks/</h3>
+                <p>Cria uma nova tarefa para o usuário autenticado.</p>
+                <h4>Body (JSON)</h4>
+                <pre><code>{
+  "title": "Comprar café",
+  "description": "Pacote de 500g",
+  "status": "PENDING",  // Opções: PENDING, COMPLETED
+  "priority": 2         // Opções: 1 (Baixa), 2 (Média), 3 (Alta)
+}</code></pre>
+            </div>
+
+            <div class="endpoint">
+                <h3><span class="method get">GET</span> /api/tasks/&lt;id&gt;/</h3>
+                <p>Retorna os detalhes de uma tarefa específica.</p>
+            </div>
+
+            <div class="endpoint">
+                <h3><span class="method put">PUT</span> /api/tasks/&lt;id&gt;/</h3>
+                <p>Atualiza integralmente uma tarefa existente. Exige o envio de todos os campos obrigatórios.</p>
+            </div>
+
+            <div class="endpoint">
+                <h3><span class="method patch">PATCH</span> /api/tasks/&lt;id&gt;/</h3>
+                <p>Atualiza parcialmente uma tarefa existente. Você pode enviar apenas os campos que deseja alterar.</p>
+                <h4>Body (JSON) - Exemplo</h4>
+                <pre><code>{
+  "status": "COMPLETED"
+}</code></pre>
+            </div>
+
+            <div class="endpoint">
+                <h3><span class="method delete">DELETE</span> /api/tasks/&lt;id&gt;/</h3>
+                <p>Remove a tarefa do sistema.</p>
+                <h4>Response</h4>
+                <p><code>204 No Content</code> (Sem corpo de resposta)</p>
+            </div>
+        </section>
+    </div>
+</body>
+</html>
